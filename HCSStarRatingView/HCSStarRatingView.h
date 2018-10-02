@@ -47,5 +47,9 @@ IB_DESIGNABLE
 @property (nonatomic, strong) IBInspectable UIImage *emptyStarImage;
 @property (nonatomic, strong) IBInspectable UIImage *halfStarImage;
 @property (nonatomic, strong) IBInspectable UIImage *filledStarImage;
+
+@property (nonatomic, strong) NSArray<UIImage*> *images;
+@property (nonatomic, strong) NSArray<UIImage*> *filledImages;
+
 @end
 

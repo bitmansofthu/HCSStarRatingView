@@ -24,6 +24,7 @@
 
 @interface HCSStarRatingView ()
 @property (nonatomic, readonly) BOOL shouldUseImages;
+@property (nonatomic, readonly) BOOL hasImageArray;
 @end
 
 @implementation HCSStarRatingView {
@@ -198,6 +199,11 @@
     return (self.emptyStarImage!=nil && self.filledStarImage!=nil);
 }
 
+- (BOOL)hasImageArray {
+    return [self.images count] > 0 && [self.images count] == self.maximumValue &&
+    [self.filledImages count] > 0 && [self.filledImages count] == self.maximumValue;
+}
+
 #pragma mark - State
 
 - (void)setEnabled:(BOOL)enabled
@@ -212,6 +218,11 @@
 }
 
 #pragma mark - Image Drawing
+
+- (void)_drawImageWithFrame:(CGRect)frame indexValue:(NSInteger)index tintColor:(UIColor*)tintColor highlighted:(BOOL)highlighted {
+    UIImage *image = highlighted ? self.filledImages[index] : self.images[index];
+    [self _drawImage:image frame:frame tintColor:tintColor];
+}
 
 - (void)_drawStarImageWithFrame:(CGRect)frame tintColor:(UIColor*)tintColor highlighted:(BOOL)highlighted {
     UIImage *image = highlighted ? self.filledStarImage : self.emptyStarImage;
@@ -317,7 +328,11 @@
                  [self _drawHalfStarWithFrame:frame tintColor:self.tintColor];
             }
         } else {
-            [self _drawStarWithFrame:frame tintColor:self.tintColor highlighted:highlighted];
+            if (self.hasImageArray) {
+                [self _drawImageWithFrame:frame indexValue:idx tintColor:self.tintColor highlighted:highlighted];
+            } else {
+                [self _drawStarWithFrame:frame tintColor:self.tintColor highlighted:highlighted];
+            }
         }
     }
 }
